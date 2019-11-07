@@ -58,8 +58,16 @@ function each(coll, f) {
   //solve it using the most appropriate helper functions(reduce,each,map,filter).
   //wordLengths("hello its me") // [5,3,2]
   
+  //split the string parameter to an array of each word.
+  //then it uses map to iterate through the array...
+  //and return the length of every element or word
   function wordLengths(str) {
       // TODO: your code here 
+      var arr = str.split(' ');
+      var result = map(arr, function(element) {
+        return element.length
+      })
+      return result;
   }
   
   //=============================================================================
@@ -71,8 +79,16 @@ function each(coll, f) {
   // countOccurrences("hello", "l"); // 2
   // countOccurrences("hello, world!", "l"); // 3
   
+  //it uses filter to iterate over the string param..
+  //and it checks if the element equal the character..
+  //it will push into an array.
+  //then it will return the length of the array.
   function countOccurrences(string, character) {
       // your code is here
+      var result = filter(string, function(element){
+        return element === character;
+      })
+      return result.length
   }
   
   //=============================================================================
@@ -83,8 +99,17 @@ function each(coll, f) {
   //solve it using the most appropriate helper functions(reduce,each,map,filter).
   // wordsLongerThanThree("Hello Mad World") //["Hello", "World"]
   
+  //split the str param into array of words.
+  //then it uses filter to check if the length of the element or word longer than 3..
+  //if it's it will push into the result array.
+  //then it return the result array
   function wordsLongerThanThree(str) {
       // TODO: your code here 
+      var arr = str.split(' ');
+      var result = filter(arr, function(element) {
+        return element.length > 3;
+      })
+      return result;
   }
   
   //=============================================================================
@@ -98,8 +123,19 @@ function each(coll, f) {
   //repeatString('dog', 2); // => 'dog' + 'dog' => 'dogdog' 
   //repeatString('dog', 3); // => 'dog' + 'dog' + 'dog' => 'dogdogdog'
   
-  function repeatString(str, count) { 
+  //I added a third param to keep track of the final result
+  //first time we call the function we don't give it the third param..
+  //so the var result will have a value of empty string
+  //the stop condition is count when count is 0 we return our result variable
+  //it it's not we will call our function again and we will subtract 1 of the count..
+  //and enter the third param with result plus str;
+  function repeatString(str, count, result) { 
+    var result = result || ''
    // TODO: your code here 
+   if(count === 0){
+    return result;
+   }
+   return repeatString(str, count - 1, result + str);
   } 
    
   
@@ -122,13 +158,67 @@ function each(coll, f) {
   // pizza.addIngredients("tomato");
   // pizza.addIngredients("meshroom");
   // pizza.addIngredients("meat");
-  // console.log(pizza.displayIngredaints());
+  // console.log(pizza.displayIngredients());
   // pizza.bakePizza();
   // pizza.eatSlice();
   // pizza.eatSlice();
   // pizza.eatSlice();
   
   // Write your code here .....
+
+  //I solve it with oop in the beginning
+  // function makePizza(crust, size, numberOfSlice){
+  //   return {
+  //     crust = crust,
+  //     size = size,
+  //     numberOfSlice = numberOfSlice,
+  //     ingredients: [],
+  //     addIngredients: addIngredients,
+  //     displayIngredients: displayIngredients,
+
+  //   }
+  // }
+  // function addIngredients(ingredient){
+  //   this.ingredients.push(ingredient);
+  // }
+  // function displayIngredients(){
+  //   return this.ingredients.join(',');
+  // }
+
+  //this closures function used to keep track of the variables, 
+  //and it has about 4 functions
+  //1 addIngredients it uses to to ingreient to our ingredient var
+  //2 displayIngredients it uses to display ingredients seperated by comma ','
+  //3 bakePizza use settimeout to display pizza description after 2s
+  //4 eatSlice it subtract 1 from slices and it return the number of left slices,
+  //if the number of slices is 0 it will return a message "ther's no slices left"
+    function makePizza(crust, size, numberOfSlice){
+      var crust = crust;
+      var size = size;
+      var numberOfSlice = numberOfSlice;
+      var ingredients = [];
+    return {
+      addIngredients: function(ingredient){
+        ingredients.push(ingredient);
+      },
+      displayIngredients: function(){
+        return ingredients.join(',');
+      },
+      bakePizza: function(){
+        setTimeout(function() {console.log('your ' + crust + ' ' + size + ' ' + numberOfSlice + ' slice pizza is done')}, 2000)
+      },
+      eatSlice: function() {
+        if(numberOfSlice){
+          numberOfSlice--;
+          return 'left ' + numberOfSlice + ' slice'    
+        }
+        return 'there\'s no slices left'
+
+      }
+
+    }
+  }
+  
   
   //=============================================================================
   /*                                  Q6                                      */
@@ -153,8 +243,38 @@ function each(coll, f) {
   */
   
   // Now, to make sure that you are actually reading, make a comment below this and type: Yes I am
-  
+  // I liked this. Yes I am :)
   // Write your code here .....
+
+  //this class return an object of variables and 2 functions
+  //1 it accebt a book name as param and it push it to 'toRead' array
+  //then add 1 to unRead variable
+  //2 it push the currentRead book to readBooks array then it add 1 to read variable
+  //then put the first book in toRead array in currentRead variable
+  //and finally it subtract 1 of unRead variable
+  //it declare the functions out side the class to save data
+  function ReadingList(){
+    var readingList = {};
+    readingList.read = 0;
+    readingList.unRead = 0;
+    readingList.toRead = [];
+    readingList.currentRead = '';
+    readingList.readBooks = [];
+    readingList.addBook = addBook;
+    readingList.finishCurrentBook = finishCurrentBook;
+    return readingList;
+}
+  function addBook(bookName){
+    this.toRead.push(bookName);
+    this.unRead += 1;
+  }
+  function finishCurrentBook(){
+    this.readBooks.push(this.currentRead);
+    this.read += 1;
+    this.currentRead = this.toRead[0];
+    this.unRead -= 1;
+  }
+
   
   //=============================================================================
   /*                                  Q7                                       */
@@ -175,6 +295,38 @@ function each(coll, f) {
   //  safe('money','small') => "watch gold-bar money"
   
   // Write your code here .....
+
+  //it uses closure to keep track of our storage size limit
+  //it has 2 other variables
+  //'items' an array to hold our items
+  //'sizeVal' is an object to hold the value of our item size
+  //it has 1 function 'addItem'
+  //it check if the size is allowed or not if it's it abstract the item size
+  //and push it into items array
+  //and check if the storageLimit equal 0 it return a our array of itmes joined with space
+  //finally if the item size is bigger than the storage it tell you that 'cant fit'.
+  function makeSafe(initial) {
+    var storageLimit = initial;
+    var items = [];
+    var sizeVal = {
+      small: 1,
+      medium: 2,
+      big: 3
+    }
+    return {
+      addItem: function(item, size){
+        if(storageLimit - sizeVal[size] >= 0){
+          storageLimit -= sizeVal[size];
+          items.push(item);
+          if(storageLimit === 0){
+            return items.join(' ')
+          }
+        }else {
+          return 'Can\'t fit'
+        }
+      }
+    }
+  }
   
   //=============================================================================
   /*                                  Q8                                       */
@@ -216,10 +368,18 @@ function each(coll, f) {
   //================================================================================
   // Theoretical questions.
   // 1- In your own words,Why do we use Closures ?
+  when we use functions there is roles:
+  1 use local variables or 2 variable from its parameter...
+  but when we want to keep track of a variable we will need to break the roles
+  and if we break the roles our variable will be in the risk of change from any other place
+  that is why we use closure because it let us create a function holds our variables and our functions
+  so we can track our variable and it will be safe
   
   // 2- In OOP, what does "this" refer to ?
+  it refers to the object that it is inside it
   
   // 3- What is jQuery?
+  Java Script library give you the ability to manipulate html element insteade of using DOM
   
   // 4- what is the diffrence between Closure's methods and The OOP's methods?
   
